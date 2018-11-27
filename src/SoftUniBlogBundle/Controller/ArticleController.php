@@ -26,7 +26,13 @@ class ArticleController extends Controller
 
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+            var_dump($form->getData()->getImage());
+
+            exit;
+
 
             $currentUser = $this->getUser();
 

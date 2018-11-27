@@ -63,10 +63,10 @@ class Article
     private $author;
 
     /**
-     * @ORM\Column(name="imageUrl", type="text", nullable=false)
+     * @ORM\Column(name="image", type="string", nullable=false)
      * @var string
      */
-    private $imageUrl;
+    private $image;
 
     /**
      * @ORM\Column(name="viewCount", type="integer")
@@ -220,21 +220,6 @@ class Article
         $this->summary = substr($this->getContent(),0, strlen($this->getContent())/2) . '...';
     }
 
-    /**
-     * @return string
-     */
-    public function getImageUrl()
-    {
-        return $this->imageUrl;
-    }
-
-    /**
-     * @param string $imageUrl
-     */
-    public function setImageUrl(string $imageUrl)
-    {
-        $this->imageUrl = $imageUrl;
-    }
 
     /**
      * @return int
@@ -245,11 +230,27 @@ class Article
     }
 
     /**
-     * @param integer
+     * @param int
      */
-    public function setViewCount(int $viewCount)
+    public function setViewCount($viewCount)
     {
         $this->viewCount = $viewCount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 }
 
