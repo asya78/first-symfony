@@ -11,7 +11,7 @@
                             <h2>{{ article.title }}</h2>
                         </header>
 
-                        <img src="{{ article.imageUrl }}" width="400" height="200">
+                        <a href="{{ path('article_view',{"id": article.id}) }}"><img src="{{ article.imageUrl }}" width="400" height="200"></a>
 
                         <p>
                             {{ article.content }}
