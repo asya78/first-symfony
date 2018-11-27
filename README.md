@@ -1,2 +1,4 @@
-# first-symfony
-My first symfony project by course PHP MVC Symfony - Soft Uni Blog
+.checkout
+=========
+
+A Symfony project created on November 20, 2018, 8:09 pm.
