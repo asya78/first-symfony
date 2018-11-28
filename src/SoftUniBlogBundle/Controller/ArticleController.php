@@ -6,6 +6,9 @@ use SoftUniBlogBundle\Entity\Article;
 use SoftUniBlogBundle\Entity\User;
 use SoftUniBlogBundle\Form\ArticleType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -29,10 +32,20 @@ class ArticleController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            var_dump($form->getData()->getImage());
+            /** @var UploadedFile $file */
+            $file = $form->getData()->getImage();
 
-            exit;
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
+            try {
+
+                $file->move($this->getParameter('article_directory'), $fileName);
+
+            } catch (FileException $ex) {
+
+            }
+
+            $article->setImage($fileName);
 
             $currentUser = $this->getUser();
 
@@ -110,10 +123,34 @@ class ArticleController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+//            $fs = new Filesystem();
+
+            /** @var UploadedFile $file */
+            $file = $form->getData()->getImage();
+
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            try {
+
+                $file->move($this->getParameter('article_directory'), $fileName);
+
+            } catch (FileException $ex) {
+
+            }
+
+            $article->setImage($fileName);
+
+
+
             $currentUser = $this->getUser();
+
             $article->setAuthor($currentUser);
+
             $em = $this->getDoctrine()->getManager();
+
             $em->merge($article);
+
             $em->flush();
 
             return $this->redirectToRoute('blog_index');
@@ -178,6 +215,17 @@ class ArticleController extends Controller
             ->findBy(['author'=> $this->getUser()]);
 
         return $this->render('article/myArticles.html.twig',['articles'=>$articles]);
+    }
+
+    /**
+     * @Route("/article/like/{id}", name="article_likes")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')" )
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function likes() {
+
+        return $this->redirectToRoute('blog_index');
+
     }
 
 }

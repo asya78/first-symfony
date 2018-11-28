@@ -8,7 +8,7 @@
                     <h2>{{ article.title }}</h2>
                 </header>
 
-                <img src="{{ article.imageUrl }}" width="400" height="200">
+                <img src="{{ asset('uploads/images/') ~ article.image }}" width="400" height="200">
 
                 <p>
                     {{ article.content }}
@@ -18,9 +18,17 @@
                     {{ article.author.fullName }}
                 </small>
 
+                <a href="">
+                    <i class="glyphicon glyphicon-thumbs-up"></i>
+                </a>
+
+                <button id="btnComment">Add</button>
+
+                <div id="form"></div>
+
                 <footer>
-                    <div class="pull-right">
-                        {%  if app.getUser() and app.getUser().isAdmin() %}
+                    <div class="row pull-right">
+                        {%  if app.getUser() or app.getUser().isAdmin() %}
                         <a class="btn btn-danger btn-xs" href="{{ path('article_delete', {'id': article.id}) }}">delete &raquo;</a>
                         <a class="btn btn-success btn-xs" href="{{ path('article_edit', {'id':article.id}) }}">edit &raquo;</a>
                         {%  endif %}
@@ -31,5 +39,22 @@
         </div>
     </div>
     </div>
+
+    <script>
+        let form = $('' +
+            '<form method="post">' +
+                '<div class="form-group">' +
+                    '<div class="col-sm-6">' +
+                        '<textarea class="form-control" rows="6" id="article_content" name="article[content]"></textarea>' +
+                    '</div>' +
+                    '<input type="submit" class="btn btn-success" value="Create" />'+
+                '</div>' +
+            '</form>');
+        $("#btnComment").click(function (e) {
+            e.preventDefault();
+            $('#form').append(form);
+            $('#form').toggle();
+        });
+    </script>
 {% endblock %}
 
